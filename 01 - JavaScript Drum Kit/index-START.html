@@ -58,7 +58,56 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('playing');
+    /*
+      3. 효과 종료시 변화하는 함수 생성
+        누른 키의 속성명 중 transform이 없다면 다음 코드를 실행하지 않고, 존재하면 playing이란 클래스를 지우도록 하는 함수 생성
+    */
+  }
 
+
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    if (!audio) return;
+
+    key.classList.add('playing');
+    audio.currentTime = 0;
+    audio.play();
+    /*
+      1. 해당 키 입력시 효과음 추가하는 함수
+        audio, key에 각각 누른 키보드의 keyCode와 일치하는 속성을 가진 요소들을 담아준다.
+        일치하는 audio가 없다면 아래 코드를 실행하지 않고, 일치한다면 누른 버튼에 playing 클래스를 추가해주고 해당 소리를 play
+
+
+      2. 키 재입력 시간 설정 (연속 입력이 가능하도록)
+        audio.currentTime = 0;
+        오디오 재생의 현재 위치를 0초로 이동하여 입력 후 다시 입력하면 같은 소리를 재생시킬 수 있고, 소리가 끝나야만 입력이 가능한게 아닌 연속 입력 가능
+
+    */
+  }
+
+  const keys = Array.from(document.querySelectorAll('.key'));
+  console.log(keys);
+  /* 
+    Array.from 유사 배열 객체나 반복 가능한 객체를 얕게 복사해 새로운 Array 객체를 만든다. 반환값은 새로운 Array
+    Array.from(array, mapFn, thisArg)
+    console.log(Array.from('foo')) -> ['f', 'o', 'o']
+    console.log(Array.from('1, 2, 3', x => x + x)); -> [2, 4, 6]
+    Array.from({length: 5}, (v, i) => i); -> [0, 1, 2, 3, 4]
+
+  */
+
+  keys.map(key => key.addEventListener('transitionend', removeTransition));
+  // transitionend는 트랜지션 이벤트가 끝냈을 때 동작하는 이벤트 (transition 완료 감지) - transition과 함꼐 사용하는 함수이며, addEventListener를 사용하여 이벤트 모니터링 가능
+  window.addEventListener('keydown', playSound);
+  /*
+    4. 효과음 출력 및 종료 설정
+      key 클래스를 가진 모든 요소를 배열에 담고 map 함수를 이용해 각각 요소에 변화가 끝나면 removeTransition 함수를 실행
+      keydown 이벤트 타입을 실행하면 playSound 함수가 동작하여 소리 play
+  */
 </script>
 
 
