@@ -5,15 +5,13 @@
   <title>JS + CSS Clock</title>
 </head>
 <body>
-
-
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
     </div>
+  </div>
 
 
   <style>
@@ -57,17 +55,58 @@
     }
 
     .hand {
-      width: 50%;
-      height: 6px;
-      background: black;
-      position: absolute;
-      top: 50%;
+      width: 50%; 
+      height: 6px; 
+      background: black; 
+      position: absolute; 
+      top: 50%; 
+      transform-origin: 100%; 
+      /* 
+        변형 효과를 줄 때 원점을 지정해준다. 기준점을 오른쪽 으로 잡음. 
+        기준축을 100% 가장 오른쪽으로 잡고, 방향을 90도만큼 돌려서 시침, 분침, 초침이 12시 방향에 있도록 바꿔준다.
+      
+      */ 
+      transform: rotate(90deg); 
+      /* 원점으로부터 회전 각도를 설정할 때 사용. 침이 12시 방향에 가도록 설정. */ 
+      transition: all 0.05s; 
+      /* 트랜지션시 애니메이션 속도 조절. 모든 트랜지션을 0.05초에 실행 완료 하겠다. */ 
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1); 
+      /* transition-timing-function은 트랜지션 효과가 진행하는 동안의 변화를 지정합니다. */ 
+      /* 
+        cubic-bezier는 전환 시작과 끝까지의 속도를 제어하는데 사용됩니다. 
+        네 점에 의해 정의되며, 그래프로 제공해서 명시할 수 있음
+      
+      */
+
     }
 
   </style>
 
   <script>
+  let secondHand = document.querySelector('.second-hand'); 
+  let minutesHand = document.querySelector('.min-hand'); 
+  let hourHand = document.querySelector('.hour-hand'); 
 
+  let setDate = () => { 
+    let now = new Date(); 
+    // 현재 시간을 가져옵니다. 
+    let seconds = now.getSeconds(); 
+    // 현재 시간 중 초을 가져옵니다. 
+    let secondsDegrees = ((seconds / 60) * 360) + 90;
+    /*
+      초, 분, 시 단위로 변수를 만들어 시간에 맞게 돌아가도록 각도 계산
+    */
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`; 
+    let minutes = now.getMinutes(); // 현재 시간 중 분을 가져옵니다. 
+    let minutesDegrees = ((minutes / 60) * 360) + 90; 
+    minutesHand.style.transform = `rotate(${minutesDegrees}deg)`; 
+    let hour = now.getHours(); // 현재 시간 중 시간을 가져옵니다. 
+    let hourDegrees = (((hour / 12) * 360) % 360) + 90; // 시계를 24시간이 아닌 12시간으로 표시 
+    hourHand.style.transform = `rotate(${hourDegrees}deg)`; 
+  }; 
+
+  setInterval(setDate, 1000); 
+  setDate();
 
   </script>
 </body>
