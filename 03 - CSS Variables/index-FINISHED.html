@@ -26,12 +26,20 @@
       --spacing: 10px;
       --blur: 10px;
     }
-
+    /* 
+      :root - HTML 요소 중 가장 상위 요소에 적용한다는 뜻 
+      --base : base라는 CSS 변수를 생성
+      위와같이 :root에 변수를 선언하는 것은 전역변수를 생성한다는 뜻
+    
+    */
     img {
       padding: var(--spacing);
       background: var(--base);
       filter: blur(var(--blur));
     }
+    /* 
+      변수를 불러올 때 var(--spacing)와 같이 불러옴
+    */
 
     .hl {
       color: var(--base);
