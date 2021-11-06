@@ -26,6 +26,8 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+      display: flex;
+      /* display: flex 적용 */
     }
 
     .panel {
@@ -43,6 +45,15 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      /* 
+        display 속성을 각 패널의 flex로 설정해주고, flex: 1을 적용하면서 브라우저 크기에 맞춰 모든 패널의 크기가 동일하게 설정이 됨
+        justify-conten: center로 수평정렬, align-items: 수직정렬, flex-direction: column으로 정렬 축을 세로로 바꿔줌 (기본값은 row)
+      */
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -56,7 +67,31 @@
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      flex: 1 0 auto;
+      /* 
+        flex-grow, flex-shrink, flex-basis 설정 
+        증가너비, 감소너비, 기본너비
+        
+      */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* 
+        패널 안의 구성요소 정렬 
+        2번과 같은 방법으로 정렬하면 각 컨텐츠의 위치가 고르게 잡힌다.
+      
+      */
     }
+
+    .panel > *:first-child { transform: translateY(-100%); }
+    .panel.open-active > *:first-child { transform: translateY(0); }
+    .panel > *:last-child { transform: translateY(100%); }
+    .panel.open-active > *:last-child { transform: translateY(0); }
+    /* 
+      패널의 효과 적용
+      패널의 첫번째 요소의 수직 위치를 위로 옮겨 숨기고, 마지막 요소를 아래로 옮겨 숨기고,
+      마지막 요소를 아래로 옮겨 숨기게 설정한 뒤에 open-active 속성이 생기면 제자리로 돌아오도록 코드를 작성
+    */
 
     .panel p {
       text-transform: uppercase;
@@ -70,7 +105,21 @@
     }
 
     .panel.open {
+      flex: 5;
+      /* 
+        toggleOpen()이 5개의 panel 에게 먹힌다 class 'open'
+        flex grow를 5로 설정, 1이면 형제들과 균등, 2면 형제들의 2배, 5면 5배 
+        - 1이면 20%의 공간
+        - 5이므로 다른 패널의 길이보다 5배 크도록
+      */
+
       font-size: 40px;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .panel p {
+        font-size: 1em;
+      }
     }
 
   </style>
@@ -105,7 +154,27 @@
   </div>
 
   <script>
+    const panels = document.querySelectorAll('.panel');
+    // panels에 모든 panel 클래스 인자를 담는다.
+    function toggleOpen() {
+      console.log('open');
+      this.classList.toggle('open');
+    }
 
+    function toggleActive(e) {
+      console.log(e.propertyName);
+      if(e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
+
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
+    /* 
+      이벤트 발생 시, open 클래스가 토글되는 toggleOpen() 함수와, flex라는 속성이 있으면, 
+      open-active 클래스가 토글되는 toggleActive() 함수를 생성 후 각 panel에 대해서 클릭할 때 toggleOpen
+      transitionend(변화가 끝날 때) toggleActive() 함수를 실행하도록 설정 (5개의 panel에게)
+    */
   </script>
 
 
