@@ -7,6 +7,81 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d');
+  //canvas 2D부터 3D까지 활용 가능
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+  // ctx.globalCompositeOperation = 'multiply';
+  /*
+    채우기 및 획 스타일
+    ctx.storkeStyle : 도형 주위의 선에 사용할 색상 또는 스타일
+    선 스타일
+    ctx.lineJoin: 두 선이 만나는 지점의 모양을 정의 (round, bavel, miter)
+    ctx.lineCap: 줄 끝의 엔딩 유형 (선의 끝 모양)
+    ctx.lineWidth: 선의 너비, 기본값 1.0 (선의 두께)
+
+  */
+
+  let isDrawing = false; // 현재 그림을 그리고 있는지 판단 여부
+  let lastX = 0;
+  let lastY = 0;
+  // 색칠할 때 시작과 끝점을 지정해준다.
+  let hue = 0; // 기본 색상
+  let direction = true; // 굵기를 정하는 방향
+
+  function draw(e) {
+    if (!isDrawing) return // stop the fn from running when they are not moused down
+    console.log(e);
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%`;
+    ctx.beginPath();
+    // start from
+    ctx.moveTo(lastX, lastY);
+    // go to
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+    /*
+      beginPath : 선의 시작점 새 경로를 시작
+      moveTo : 그리기 시작할 좌표
+      lineTo : 그리기 종료 지점 좌표
+      stroke : 시작점부터 종료지점까지 이어주는 역할
+
+    */
+
+
+    hue++; // 색상이 그림을 그려 움직일때마다 바뀌게끔
+    if (hue >= 360) {
+      hue = 0;
+    }
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      direction = !direction;
+    }
+
+    if (direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
+}
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+    // 마우스를 누르면 mousedown - isDrawing이 true, 그리기 효과 시작
+    // mousemove - draw 함수 실행
+    // 마우스를 떼거나 mouseup, 마우스가 뷰포트를 떠나면 (mouseout) - isDrawing false, 그리기 끝
+
 </script>
 
 <style>
