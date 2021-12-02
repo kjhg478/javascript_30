@@ -17,29 +17,81 @@
       p.style.fontSize = '50px';
     }
 
-    // Regular
+    // Regular - 기본 콘솔 출력
+    console.log('hello');
 
-    // Interpolated
+    // Interpolated (보간, 투 점을 연결하는 방법) - %s 자리에 , 뒤에 값이 들어감
+    console.log('Hello I am a %s string!', '💩')
 
-    // Styled
+    // Styled - %c 뒤에 , 뒤의 스타일 값들이 적용됨
+    // console.log('%c I am some great text', 'font-size:50px; background:red; text-shadow: 10px 10px 0 blue')
 
-    // warning!
+    // warning! - 경고창이 노란색으로 표시
+    console.warn('OH NOOO');
 
-    // Error :|
+    // Error :| - 에러창이 빨간색으로 표시
+    console.error('Shit!');
 
-    // Info
+    // Info - 파란 느낌표로 정보 표시
+    console.info('Crocodiles eat 3-4 people per year');
 
-    // Testing
+    // Testing - if 문을 사용하지 않고 콘솔 창에서 간단히 확인할 때 사용
+    const p = document.querySelector('p');
+    // assert - 첫번째 인자가 false일 때 로그 메세지를 출력
+    console.assert(p.classList.contains('ouch'), 'That is wrong!');
 
-    // clearing
+    // clearing - 콘솔의 내용을 전부 지운다.
+    console.clear();
 
-    // Viewing DOM Elements
+    // Viewing DOM Elements - DOM Elements를 보기 위해서 객체는 dir로, 나머지는 log로 확인
+    console.log(p); // 괄호 안의 해당 엘리먼트를 보여줌
+    console.dir(p); 
+    // 괄호 안의 해당 엘리먼트의 모든 속성을 보여줌
+    // dir은 저장된 객체의 자바스크립트 표현을 출력, HTML 요소는 DOM 표현의 속성 출력
 
-    // Grouping together
+    console.clear();
+
+    // Grouping together - console.group은 한 번 반복할 때마다 그룹으로 묶어서 확인하고 싶을 때 사용
+    dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`);
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+    // 묶고 싶은 곳에서 console.group, 마지막에서 console.groupEnd를 사용
+    // console.group대신 console.groupCollapsed를 사용하면 드롭다운이 닫혀 있는 채로 콘솔에서 찍히게 됨
+    // 콘솔창이 더 깔끔하게 보임
 
     // counting
 
-    // timing
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Steve');
+    console.count('Steve');
+    console.count('Wes');
+    console.count('Steve');
+    console.count('Wes');
+    console.count('Steve');
+    console.count('Steve');
+    console.count('Steve');
+    console.count('Steve');
+    console.count('Steve');
+    // count는 같은 인자의 개수를 셈
+
+    // timing - console.time을 이용하면 실행되는데 걸리는 시간을 출력할 수 있다.
+    console.time('fetching data');
+    fetch('https://api.github.com/users/wesbos')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      });
+
+    // 시작점 time과 시간 재는 것을 멈추고 싶은 곳에 timeEnd, 데이터를 받아와 타이머를 작동
+
+    console.table(dogs);
+    // 표처럼 보여줄 수 있는 데이터를 표로 보여줄 때 사용
 
   </script>
 </body>
