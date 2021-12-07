@@ -7,6 +7,22 @@
 </head>
 <body>
 <script>
+const pressed = [];
+const secretCode = 'wesbos';
+
+window.addEventListener('keyup', (e) => {
+  console.log(e.key);
+  pressed.push(e.key);
+  pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+  // 입력한 값들이 뒤에서부터 채워지게 하기 위해 - 옵션 사용
+  if (pressed.join('').includes(secretCode)) {
+    console.log('DING DING!');
+    cornify_add();
+  }
+  console.log(pressed);
+});
+
+// 빈 배열과 비밀코드가 담긴 secretCode 생성
 </script>
 </body>
 </html>
