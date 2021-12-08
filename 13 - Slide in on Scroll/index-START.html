@@ -57,6 +57,36 @@
         if (callNow) func.apply(context, args);
       };
     }
+    // 외부에 공개되어 있는 디바운스 함수 틀 중 하나
+
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide() {
+      sliderImages.forEach(sliderImage => {
+        
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2;
+        // half way through the image
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;
+        // bottom of the image
+        const isHalfShown = slideInAt > sliderImage.offsetTop;
+        // 이미지의 절반을 계산한 값이 각 이미지의 상단 위치를 넘어섰을 때
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        // 현재 스크롤된 위치가 이미지의 하단 좌표보다 값이 작은 경우
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active');
+        } else {
+          sliderImage.classList.remove('active');
+        }
+      });
+    }
+    // 이미지에 슬라이드 트랜지션을 추가할 지 말지 결정하는 함수 .active로 트랜지션 효과를 적용 및 제거
+
+    window.addEventListener('scroll', debounce(checkSlide));
+    // scroll 이벤트 추가
+    /*
+      스크롤 값을 수학을 이용해 계산하는 것보다, 각 객체에 대해 적절한 상황에서 변수를 선언할 수 있고, 
+      조건을 검사하고 특정 메소드를 호출하는 것이 목적
+    */
 
   </script>
 
@@ -101,7 +131,7 @@
 
     .slide-in {
       opacity: 0;
-      transition: all .5s;
+      transition: all 1.5s;
     }
 
     .align-left.slide-in {
