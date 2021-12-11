@@ -28,7 +28,51 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function addItem(e) {
+    e.preventDefault();
+    // <form> 이벤트를 걸기 때문에 기본 동작을 막는다. (기본동작 = 새로고침)
+    const text = (this.querySelector('[name=item]')).value;
+    const item = {
+      text,
+      done: false
+    };
+
+    items.push(item);
+    populateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items));
+    this.reset(); // value를 초기화 할 때 사용
+  }
+  // 아이템을 추가하는 함수 생성
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `;
+    }).join('');
+  }
+  // 추가한 아이템을 리스트로 보여주는 함수 생성 
+  // 각 요소를 li 태그의 요소로 바꿔 한개씩 join("") 시켜주면 리스트 전체를 원하는 innerHTML로 바꿔주는 함수
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) return; // skip this unless it's an input
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+  // 체크 여부를 저장하는 함수 생성
+
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+
+  populateList(items, itemsList);
 
 </script>
 
