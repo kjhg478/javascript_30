@@ -182,6 +182,30 @@
     </li>
   </ul>
 <script>
+// 영상이 있다고 가정하고, data-time에 표현되어 있는 영상 길이 정보를 한번에 가져와 console.log()로 확인
+
+const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+// timeNode에 [data-time]을 가진 태그들을 배열로 담아준다.
+
+const seconds = timeNodes
+  .map(node => node.dataset.time)
+  // 배열 값들의 재생시간을 담고
+  .map(timeCode => {
+    const [mins, secs] = timeCode.split(':').map(parseFloat);
+    // :를 기준으로 분, 초로 나누기
+    return (mins * 60) + secs;
+    // 정소루 출력
+  })
+  .reduce((total, vidSeconds) => total + vidSeconds);
+
+  let secondsLeft = seconds;
+  const hours = Math.floor(secondsLeft / 3600);
+  secondsLeft = secondsLeft % 3600;
+
+  const mins = Math.floor(secondsLeft / 60);
+  secondsLeft = secondsLeft % 60;
+
+  console.log(hours, mins, secondsLeft);
 </script>
 </body>
 </html>
