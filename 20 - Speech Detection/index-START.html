@@ -10,7 +10,41 @@
   </div>
 
 <script>
+  // 음성인식
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // web speech api의 음성 인식 서비스를 위한 컨트롤러 인터페이스이며, 음성 인식 이벤트를 처리한다.
+  // webkit 브라우저 전역으로 확대, 각종 기능들을 가지고 있음
+
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+  // 음성 인식 인터페이스의 임시 결과 속성은 중간 결과를 반환해야 하는지 여부를 제어 기본값 (false)
+  recognition.lang = 'en-US';
+  
+  let p = document.createElement('p');
+  const words = document.querySelector('.words');
+  words.appendChild(p);
+
+  recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('');
+
+      const poopScript = transcript.replace(/poop|poo|shit|dump/gi, '💩');
+      p.textContent = poopScript;
+
+      if (e.results[0].isFinal) {
+        p = document.createElement('p');
+        words.appendChild(p);
+      }
+  });
+  // 음성인식 결과를 배열로 변환해 텍스트에 담고, poop, poo라는 비속어가 오면 저 이모티콘으로 표시
+  // 말이 끝나면 p에 한 문장으로 내용을 담아 말이 끝나면 새 문장이 다시 시작하게 됨
+
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
+  // 이벤트 실행
 
 
 </script>
