@@ -59,6 +59,22 @@
     /*Compass: https://thenounproject.com/search/?q=compass&i=592352*/
   </style>
   <script>
+    // 나침반과 현재속도를 출력
+    // geolocation API - 웹 어플리케이션에서 사용자의 위치 정보를 받아 제공, 나침반이나 속도계를 만들 떄 사용
+    const arrow = document.querySelector('.arrow');
+    const speed = document.querySelector('.speed-value');
+
+    navigator.geolocation.watchPosition((data) => {
+      /*
+        navigator.geolocation으로 geolocation API를 사용 가능하며, 
+        watchPosition으로 현재 위치를 식별하는데 사용되며, data.coords.speed로 현재 속도를 알아내 바인딩함
+      */
+      console.log(data);
+      speed.textContent = data.coords.speed;
+      arrow.style.transform = `rotate(${data.coords.heading}deg)`;
+    }, (err) => {
+      console.error(err);
+    });
   </script>
 </body>
 </html>
