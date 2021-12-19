@@ -27,6 +27,38 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+    // Link Highlighter로, a tag를 가진 element에 hover가 되면 하이라이트가 생기는 실습
+    const triggers = document.querySelector('a');
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+    document.body.appendChild(highlight);
+
+    function highLightLink() {
+      const linkCoords = this.getBoundingClientRect();
+      /*
+        getBoundingClientRect 함수는 해당 element의 위치 정보를 반환해주는 함수 (각종 좌표값이 들어있는 객체 반환)
+        viewport 기준으로 현재 element의 좌측 상단의 좌표인 x/left, y/top과 우측 하단의 좌표인 right, bottom을 반환한다.
+        스크롤을 내려도 highlight 객체가 정확히 이동해야 하므로 스크롤 x, y 값을 가져와 더해주어야 정확한 요소의 위치에 객체가 이동
+      */
+      console.log(linkCoords);
+
+      const coords = {
+        width: linkCoords.width,
+        height: linkCoords.height,
+        top: linkCoords.top + window.scrollY,
+        left: linkCoords.left + window.scrollX
+      };
+
+      highlight.style.width = `${coords.width}px`;
+      highlight.style.height = `${coords.height}px`;
+      highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+    }
+
+    triggers.forEach(a => a.addEventListener('mouseenter', highLightLink));
+    /*
+      mouseenter : element에 mouse가 올라갔을 때 발생하는 event
+      css의 hover와 비슷함
+    */
   </script>
 </body>
 </html>
