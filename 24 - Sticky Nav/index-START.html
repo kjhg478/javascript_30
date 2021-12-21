@@ -54,7 +54,22 @@
   </div>
 
 <script>
+  const nav = document.querySelector('#main');
+  let topOfNav = nav.offsetTop;
 
+  function fixNav() {
+    if (window.scrollY >= topOfNav) {
+      document.body.style.paddingTop = nav.offsetHeight + 'px';
+      // offsetHeight 옵션이 없다면 고정이 될 때 나머지 부분이 다시 렌더링 되면서 뭔가 급한 모습을 줍니다. (고정 요소가 공간을 차지하지 않기 때문에)
+      // 엄청 큰 차이는 아니지만 사용자로서 급한 느낌이 들긴 한다. (공간이 없어 영역을 차지해버리는 듯한 느낌)
+      document.body.classList.add('fixed-nav');
+    } else {
+      document.body.classList.remove('fixed-nav');
+      document.body.style.paddingTop = 0;
+    }
+  }
+
+  window.addEventListener('scroll', fixNav);
 </script>
 
 </body>
