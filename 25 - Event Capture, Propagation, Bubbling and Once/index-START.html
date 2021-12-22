@@ -42,6 +42,44 @@
 
 <button></button>
 <script>
+/*
+  Event Bubbling
+    - 특정 element에서 event 발생 시, 상위 element로 이벤트가 전파(propagation)되어 가는 현상
+    - 가장 깊은 요소에서 부모 요소로 올라가는 것 (임의로 막지 않으면 자동으로 실행)
+  
+  Event Capture
+    - 위의 버블링과 반대방향으로 전파 하는 방식 (하위 element로)
+  
+  event.stopPropagation()
+    - 가장 직접적으로 이벤트가 발생한 element 이외에 전파를 멈추기 위한 함수
+  
+  Event Delegation
+    - 하위 요소에 각각 이벤트를 붙이지 않고 상위 요소에서 하위 요소의 이벤트들을 제어하는 방식
+  
+  once 
+    - 이벤트 핸들러가 한번만 작동하고, 이후 addEventListener가 제거
+
+*/
+
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+  function logText(e) {
+    console.log(this.classList.value);
+    // e.stopPropagation(); // stop bubbling!
+    // console.log(this);
+  }
+
+  divs.forEach(div => div.addEventListener('click', logText, {
+    capture: false,
+    once: true
+  }));
+
+  button.addEventListener('click', () => {
+    console.log('Click!!!');
+  }, {
+    once: true
+  });
 
 </script>
 </body>
