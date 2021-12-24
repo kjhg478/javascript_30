@@ -220,6 +220,45 @@
 </style>
 
 <script>
+  // 마우스 커서를 올리면 메뉴를 띄운다.
+
+  const triggers = document.querySelectorAll('.cool > li');
+  const background  = document.querySelector('.dropdownBackground');
+  const nav  = document.querySelector('.top');
+  // 해당 클래스를 가지고 있는 태그를 상수에 매치시켜서 정의
+
+  console.log(triggers);
+  function handleEnter() {
+    this.classList.add('trigger-enter');
+    setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150);
+    background.classList.add('open');
+
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoords = dropdown.getBoundingClientRect();
+    const navCoords = nav.getBoundingClientRect(); // DOM Element의 위치를 구할 때 사용
+
+    const coords = {
+      height: dropdownCoords.height,
+      width: dropdownCoords.width,
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left - navCoords.left
+    };
+
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+  // 마우스가 올라갈 떄의 함수 생성
+  // 박스를 출력하고, 150ms 뒤에 내용을 추가
+
+  function handleLeave() {
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
+  }
+  // 마우스가 떠날 때, remove로 클래스를 지워줌
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
 </script>
 
 </body>
