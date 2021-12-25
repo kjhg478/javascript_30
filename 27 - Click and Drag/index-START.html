@@ -35,6 +35,42 @@
   </div>
 
 <script>
+
+  const slider = document.querySelector('.items');
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+  });
+  // 마우스를 클릭하면 isDown을 true로 바꾸고 active 클래스를 추가해 드래그 할 때 박스 확대효과를 줌
+  
+
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;  // stop the fn from running
+    // e.preventDefault();
+    console.log(e);
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 3; // 마우스로 이동한 각 픽셀에 대해 3픽셀을 스크롤
+    slider.scrollLeft = scrollLeft - walk;
+  });
+  // mousemove 이벤트, 마우스를 이동할 때 isDown이 false면 효과를 멈춘다.
+  // e.preventDefault()로 기본값을 방지하면 영역 내에서 텍스트 등의 선택을 방지할 수 있다.
+
 </script>
 
   </body>
