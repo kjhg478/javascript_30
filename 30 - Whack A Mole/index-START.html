@@ -37,6 +37,67 @@
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
 
+  let lastHole;
+  let timeUp = false;
+  let score = 0;
+
+  function randomTime(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+  }
+  // 랜덤 시간을 만드는 함수 (0.2 - 1초 사이 랜덤)
+
+  function randomHole(holes) {
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx];
+    if (hole === lastHole) {
+      console.log('Ah nah thats the same one bud');
+      return randomHole(holes);
+    }
+    lastHole = hole;
+    return hole;
+  }
+  // 두더지가 올라올 구멍을 정하는 함수
+  // 전체 6개 구멍에서 랜덤으로 한개를 정하고 중복되지 않도록 조건 설정
+
+  function peep() {
+    const time = randomTime(200, 1000);
+    const hole = randomHole(holes);
+    hole.classList.add('up');
+    setTimeout(() => {
+      hole.classList.remove('up');
+      if (!timeUp) peep();
+    }, time);
+  }
+  // 두더지들이 랜덤으로 나오게 하는 함수 
+
+  function startGame() {
+    scoreBoard.textContent = 0;
+    timeUp = false;
+    score = 0;
+    peep();
+    setTimeout(() => timeUp = true, 10000)
+  }
+  // 게임시작 함수
+
+  function bonk(e) {
+    if(!e.isTrusted) return; // cheater!
+    /*
+    isTrusted 
+     - 이벤트가 사용자 액션에 의해 발생하면 true
+     - 스크립트에서 생성되거나 수정되면 false 반환 (EventTarget.dispatchEvent() 로 발송한 이벤트)
+     - 신뢰할 수 있는 이벤트와 없는 이벤트를 구분지음
+    */
+    score++;
+    this.parentNode.classList.remove('up');
+    scoreBoard.textContent = score;
+    // textContent : 텍스트로 내용을 표시
+  }
+  // 두더지를 잡는 함수
+
+  moles.forEach(mole => mole.addEventListener('click', bonk));
+
+</script>
+
 </script>
 </body>
 </html>
